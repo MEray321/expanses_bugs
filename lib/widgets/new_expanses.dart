@@ -1,3 +1,4 @@
+import 'package:expenses_app/widgets/expanses.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:expenses_app/Models/expanses.dart';
@@ -71,9 +72,13 @@ class _NewExpansesState extends State<NewExpanses> {
                           firstDate: firstDate,
                           lastDate: now,
                         );
+                  if(pickdata == null) return;
 
                         // 🐞 BUG 1: نسينا setState
-                        _selectedDate = pickdata;
+                        setState(() {
+                             _selectedDate = pickdata;
+                        });
+                     
                       },
                       icon: const Icon(Icons.calendar_month),
                     ),
@@ -112,10 +117,9 @@ class _NewExpansesState extends State<NewExpanses> {
                   // 🐞 BUG 2: شرط معكوس
                   final bool amountisvalid =
                       enteredAmount != null && enteredAmount > 0;
-
-                  if (_titlecontroller.text.trim().isEmpty ||
-                      amountisvalid ||
-                      _selectedDate == null) {
+                  if (_titlecontroller.text.trim().isEmpty &&
+                      amountisvalid &&
+                      _selectedDate != null) {
                     return;
                   }
 
@@ -129,14 +133,7 @@ class _NewExpansesState extends State<NewExpanses> {
                   );
 
                   // 🐞 BUG 3: بدل ما يقفل بيروح يفتح صفحة تانية
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => const Scaffold(
-                        body: Center(child: Text("Wrong Navigation 😅")),
-                      ),
-                    ),
-                  );
+                  Navigator.push(context , MaterialPageRoute(builder: (context) => Expanses()));
                 },
                 child: const Text('Save Expanses'),
               ),
